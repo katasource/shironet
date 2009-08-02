@@ -1,0 +1,231 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3F829E25-270E-40D4-B4DC-EDD0B96A29C1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Apache.Shiro</RootNamespace>
+    <AssemblyName>Shiro.Core</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authc\AccountException.cs" />
+    <Compile Include="Authc\AuthenticationEventArgs.cs" />
+    <Compile Include="Authc\AuthenticationException.cs" />
+    <Compile Include="Authc\ConcurrentAccessException.cs" />
+    <Compile Include="Authc\CredentialsException.cs" />
+    <Compile Include="Authc\Credential\ICredentialsMatcher.cs" />
+    <Compile Include="Authc\DisabledAccountException.cs" />
+    <Compile Include="Authc\ExcessiveAttemptsException.cs" />
+    <Compile Include="Authc\ExpiredCredentialsException.cs" />
+    <Compile Include="Authc\FailedLoginEventArgs.cs" />
+    <Compile Include="Authc\IAccount.cs" />
+    <Compile Include="Authc\IAuthenticationEventPublisher.cs" />
+    <Compile Include="Authc\IAuthenticationInfo.cs" />
+    <Compile Include="Authc\IAuthenticationToken.cs" />
+    <Compile Include="Authc\IAuthenticator.cs" />
+    <Compile Include="Authc\IInetAuthenticationToken.cs" />
+    <Compile Include="Authc\IMergeableAuthenticationInfo.cs" />
+    <Compile Include="Authc\IncorrectCredentialsException.cs" />
+    <Compile Include="Authc\IRememberMeAuthenticationToken.cs" />
+    <Compile Include="Authc\LockedAccountException.cs" />
+    <Compile Include="Authc\LogoutEventArgs.cs" />
+    <Compile Include="Authc\LoginEventArgs.cs" />
+    <Compile Include="Authc\Pam\IAuthenticationStrategy.cs" />
+    <Compile Include="Authc\Pam\UnsupportedTokenException.cs" />
+    <Compile Include="Authc\SuccessfulLoginEventArgs.cs" />
+    <Compile Include="Authc\UnknownAccountException.cs" />
+    <Compile Include="Authz\RequiresAuthenticationAttribute.cs" />
+    <Compile Include="Authz\RequiresGuestAttribute.cs" />
+    <Compile Include="Authz\RequiresPermissionsAttribute.cs" />
+    <Compile Include="Authz\RequiresRolesAttribute.cs" />
+    <Compile Include="Authz\RequiresUserAttribute.cs" />
+    <Compile Include="Authz\AuthorizationException.cs" />
+    <Compile Include="Authz\HostUnauthorizedException.cs" />
+    <Compile Include="Authz\IAuthorizationInfo.cs" />
+    <Compile Include="Authz\IAuthorizer.cs" />
+    <Compile Include="Authz\IPermission.cs" />
+    <Compile Include="Authz\Permission\IPermissionResolver.cs" />
+    <Compile Include="Authz\Permission\IPermissionResolverAware.cs" />
+    <Compile Include="Authz\Permission\UnresolvablePermissionException.cs" />
+    <Compile Include="Authz\UnauthenticatedException.cs" />
+    <Compile Include="Authz\UnauthorizedException.cs" />
+    <Compile Include="Cache\CacheException.cs" />
+    <Compile Include="Cache\DictionaryCache.cs" />
+    <Compile Include="Cache\DictionaryCacheManager.cs" />
+    <Compile Include="Cache\ICache.cs" />
+    <Compile Include="Cache\ICacheManager.cs" />
+    <Compile Include="Cache\ICacheManagerAware.cs" />
+    <Compile Include="Cache\ImmutableProxiedCache.cs" />
+    <Compile Include="Codec\CodecException.cs" />
+    <Compile Include="Codec\Hex.cs" />
+    <Compile Include="Collections\CollectionExtensions.cs" />
+    <Compile Include="Collections\Generic\ISet.cs" />
+    <Compile Include="Configuration\ConfigurationException.cs" />
+    <Compile Include="Configuration\IConfiguration.cs" />
+    <Compile Include="Configuration\ResourceConfiguration.cs" />
+    <Compile Include="Configuration\TextConfiguration.cs" />
+    <Compile Include="Configuration\UnresolvableReferenceException.cs" />
+    <Compile Include="Crypto\Hash\AbstractHash.cs" />
+    <Compile Include="Crypto\Hash\IHash.cs" />
+    <Compile Include="Crypto\ICipher.cs" />
+    <Compile Include="IO\AbstractResource.cs" />
+    <Compile Include="IO\DefaultSerializer.cs" />
+    <Compile Include="IO\ISerializer.cs" />
+    <Compile Include="IO\ResourceException.cs" />
+    <Compile Include="IO\SerializationException.cs" />
+    <Compile Include="IO\TextResource.cs" />
+    <Compile Include="ShiroException.cs" />
+    <Compile Include="Management\IRememberMeManager.cs" />
+    <Compile Include="Management\ISecurityManager.cs" />
+    <Compile Include="Management\ISecurityManagerAware.cs" />
+    <Compile Include="Management\ISecurityManagerFactory.cs" />
+    <Compile Include="Session\Management\DelegatingSession.cs" />
+    <Compile Include="Session\Management\Eis\ISessionDaoAware.cs" />
+    <Compile Include="Session\Management\ISessionFactory.cs" />
+    <Compile Include="Session\Management\ISessionFactoryAware.cs" />
+    <Compile Include="Management\ISubjectBinder.cs" />
+    <Compile Include="Management\ISubjectFactory.cs" />
+    <Compile Include="Session\Management\SimpleSessionFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Realm\IRealm.cs" />
+    <Compile Include="Realm\IRealmFactory.cs" />
+    <Compile Include="Session\ExpiredSessionException.cs" />
+    <Compile Include="Session\ImmutableProxiedSessionAttributes.cs" />
+    <Compile Include="Session\InvalidSessionException.cs" />
+    <Compile Include="Session\ISession.cs" />
+    <Compile Include="Session\ISessionAttributes.cs" />
+    <Compile Include="Session\ISessionEventPublisher.cs" />
+    <Compile Include="Session\DictionarySessionAttributes.cs" />
+    <Compile Include="Session\Management\AbstractSessionManager.cs" />
+    <Compile Include="Session\Management\AbstractValidatingSessionManager.cs" />
+    <Compile Include="Session\Management\Eis\CachingSessionDao.cs" />
+    <Compile Include="Session\Management\Eis\ISessionDao.cs" />
+    <Compile Include="Session\Management\Eis\MemorySessionDao.cs" />
+    <Compile Include="Session\Management\ILocalSessionManager.cs" />
+    <Compile Include="Session\Management\ImmutableProxiedSession.cs" />
+    <Compile Include="Session\Management\ISessionManager.cs" />
+    <Compile Include="Session\Management\ISessionValidationScheduler.cs" />
+    <Compile Include="Session\Management\IValidatingSession.cs" />
+    <Compile Include="Session\Management\IValidatingSessionManager.cs" />
+    <Compile Include="Session\Management\SimpleSession.cs" />
+    <Compile Include="Session\ProxiedSession.cs" />
+    <Compile Include="Session\ReplacedSessionException.cs" />
+    <Compile Include="Session\SessionEventArgs.cs" />
+    <Compile Include="Session\SessionException.cs" />
+    <Compile Include="Session\StoppedSessionException.cs" />
+    <Compile Include="Session\UnknownSessionException.cs" />
+    <Compile Include="Subject\DelegatingSubject.cs" />
+    <Compile Include="Subject\IMutablePrincipalCollection.cs" />
+    <Compile Include="Subject\InvalidSubjectException.cs" />
+    <Compile Include="Subject\ISubject.cs" />
+    <Compile Include="Subject\IPrincipalCollection.cs" />
+    <Compile Include="Subject\SimplePrincipalCollection.cs" />
+    <Compile Include="Subject\SubjectException.cs" />
+    <Compile Include="Util\IInitializable.cs" />
+    <Compile Include="Util\INameable.cs" />
+    <Compile Include="Util\IPatternMatcher.cs" />
+    <Compile Include="Util\LifecycleUtils.cs" />
+    <Compile Include="Util\ProxiedDictionary.cs" />
+    <Compile Include="Util\ReadOnlyDictionary.cs" />
+    <Compile Include="Util\ThreadContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Aop\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
