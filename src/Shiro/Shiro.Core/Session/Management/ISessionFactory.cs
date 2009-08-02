@@ -1,9 +1,9 @@
-using System.Net;
+using System.Collections.Generic;
 
 namespace Apache.Shiro.Session.Management
 {
     public interface ISessionFactory
     {
-        ISession CreateSession(IPAddress originatingHost);
+        ISession CreateSession(IDictionary<object, object> data);
     }
 }

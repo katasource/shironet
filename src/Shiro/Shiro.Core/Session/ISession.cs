@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Apache.Shiro.Session
@@ -7,7 +8,7 @@ namespace Apache.Shiro.Session
     {
         #region Properties
 
-        ISessionAttributes Attributes
+        ICollection<object> AttributeKeys
         {
             get;
         }
@@ -41,6 +42,12 @@ namespace Apache.Shiro.Session
         #endregion
 
         #region Methods
+
+        object GetAttribute(object key);
+
+        object RemoveAttribute(object key);
+
+        void SetAttribute(object key, object value);
 
         void Stop();
 

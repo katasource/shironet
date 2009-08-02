@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Apache.Shiro.Session.Management.Eis
+namespace Apache.Shiro.Session.Management.Enterprise
 {
     public interface ISessionDao
     {

@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
+
+using Common.Logging;
 
 namespace Apache.Shiro.Session.Management
 {
     public class SimpleSession : IValidatingSession
     {
-        private ISessionAttributes _attributes;
+        private static readonly ILog Log = LogManager.GetLogger(typeof (SimpleSession));
+
+        private IDictionary<object, object> _attributes;
         private IPAddress _hostAddress;
         private DateTime _lastAccessTime;
         private DateTime _startTime;
@@ -30,21 +35,11 @@ namespace Apache.Shiro.Session.Management
 
         #region ISession Members
 
-        public ISessionAttributes Attributes
+        public ICollection<object> AttributeKeys
         {
             get
             {
-                Touch();
-                if (_attributes == null)
-                {
-                    _attributes = new DictionarySessionAttributes();
-                }
-                return _attributes;
-            }
-            set
-            {
-                Touch();
-                _attributes = value;
+                return _attributes == null ? new Object[0] : _attributes.Keys;
             }
         }
 
@@ -104,6 +99,42 @@ namespace Apache.Shiro.Session.Management
             }
         }
 
+        public object GetAttribute(object key)
+        {
+            if (_attributes == null)
+            {
+                return null;
+            }
+
+            object value;
+            _attributes.TryGetValue(key, out value);
+            return value;
+        }
+
+        public object RemoveAttribute(object key)
+        {
+            if (_attributes == null)
+            {
+                return null;
+            }
+
+            object value;
+            if (_attributes.TryGetValue(key, out value))
+            {
+                _attributes.Remove(key);
+            }
+            return value;
+        }
+
+        public void SetAttribute(object key, object value)
+        {
+            if (_attributes == null)
+            {
+                _attributes = new Dictionary<object, object>();
+            }
+            _attributes.Add(key, value);
+        }
+
         public void Stop()
         {
             if (_stopTime.Ticks == 0)
@@ -125,7 +156,7 @@ namespace Apache.Shiro.Session.Management
         {
             get
             {
-                return (!IsStopped && !IsExpired);
+                return !(IsStopped || IsExpired);
             }
         }
 
@@ -133,8 +164,7 @@ namespace Apache.Shiro.Session.Management
         {
             if (IsStopped)
             {
-                string msg = string.Format("Session with ID [{0}] has been explicitly " +
-                    "stopped. No further interaction under this session is allowed.", Id);
+                var msg = string.Format(Properties.Resources.SessionStoppedMessage, Id);
                 throw new StoppedSessionException(msg);
             }
 
@@ -142,11 +172,11 @@ namespace Apache.Shiro.Session.Management
             {
                 Expire();
 
-                string msg = string.Format("Session with ID [{0}] has expired. " +
-                    "Last access time: {1}. " +
-                    "Current time: {2}. " +
-                    "Session timeout is set to {3}",
-                    Id, LastAccessTime, DateTime.Now, TimeSpan.FromMilliseconds(Timeout));
+                var span = TimeSpan.FromMilliseconds(Timeout);
+                var msg = string.Format(Properties.Resources.SessionExpiredMessage,
+                    Id, LastAccessTime, DateTime.Now, span.TotalSeconds, span.TotalMinutes);
+                Log.Trace(msg);
+
                 throw new ExpiredSessionException(msg);
             }
         }
@@ -154,6 +184,18 @@ namespace Apache.Shiro.Session.Management
         #endregion
 
         #region Public Properties
+
+        public IDictionary<object, object> Attributes
+        {
+            get
+            {
+                return _attributes;
+            }
+            set
+            {
+                _attributes = value;
+            }
+        }
 
         public bool IsExpired
         {
@@ -206,13 +248,15 @@ namespace Apache.Shiro.Session.Management
             {
                 return true;
             }
+
             if (Timeout > 1)
             {
-                TimeSpan span = DateTime.Now - LastAccessTime;
+                var span = DateTime.Now - LastAccessTime;
 
                 return span.TotalMilliseconds > Timeout;
             }
-
+            
+            Log.TraceFormat("No timeout for session with ID [{0}]. Session is not considered expired", Id);
             return false;
         }
 

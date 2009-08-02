@@ -1,4 +1,4 @@
-namespace Apache.Shiro.Session.Management.Eis
+namespace Apache.Shiro.Session.Management.Enterprise
 {
     public interface ISessionDaoAware
     {

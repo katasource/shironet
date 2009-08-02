@@ -116,12 +116,7 @@ namespace Apache.Shiro.Subject
             }
         }
 
-        public IList<object> AsList()
-        {
-            return new List<object>(AsSet());
-        }
-
-        public HashSet<object> AsSet()
+        public ICollection<object> AsCollection()
         {
             var all = new HashSet<object>();
             foreach (var principal in _realmPrincipals.Values)
@@ -130,6 +125,18 @@ namespace Apache.Shiro.Subject
             }
 
             return all;
+        }
+
+        public IList<object> AsList()
+        {
+            return new List<object>(AsCollection());
+        }
+
+        public ICollection<T> ByType<T>()
+        {
+            var principals = _realmPrincipals.SelectMany(keyValue => keyValue.Value.OfType<T>());
+
+            return new List<T>(principals);
         }
 
         public ICollection<object> FromRealm(string realmName)
@@ -148,20 +155,13 @@ namespace Apache.Shiro.Subject
             return ByType<T>().FirstOrDefault();
         }
 
-        public ICollection<T> ByType<T>()
-        {
-            var principals = _realmPrincipals.SelectMany(keyValue => keyValue.Value.OfType<T>());
-
-            return new List<T>(principals);
-        }
-
         #endregion
 
         #region IEnumerable<object> Members
 
         public IEnumerator<object> GetEnumerator()
         {
-            return AsSet().GetEnumerator();
+            return AsCollection().GetEnumerator();
         }
 
         #endregion

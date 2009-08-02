@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Apache.Shiro.Session.Management
@@ -23,14 +24,22 @@ namespace Apache.Shiro.Session.Management
             SessionManager = manager;
         }
 
+        public DelegatingSession(ISessionManager manager, object id,
+                                 IPAddress hostAddress, bool handleReplacedSessions)
+            : this(manager, id)
+        {
+            HandleReplacedSessions = handleReplacedSessions;
+
+            _hostAddress = hostAddress;
+        }
+
         #region ISession Members
 
-        public ISessionAttributes Attributes
+        public ICollection<object> AttributeKeys
         {
             get
             {
-                //TODO: This is going to be horrifically ineffecient and must be corrected
-                return Do(id => SessionManager.GetAttributes(id));
+                return Do(id => SessionManager.GetAttributeKeys(id));
             }
         }
 
@@ -68,6 +77,21 @@ namespace Apache.Shiro.Session.Management
             }
         }
 
+        public object GetAttribute(object key)
+        {
+            return Do(id => SessionManager.GetAttribute(id, key));
+        }
+
+        public object RemoveAttribute(object key)
+        {
+            return Do(id => SessionManager.RemoveAttribute(id, key));
+        }
+
+        public void SetAttribute(object key, object value)
+        {
+            Do(id => SessionManager.SetAttribute(id, key, value));
+        }
+
         public long Timeout
         {
             get
@@ -94,6 +118,8 @@ namespace Apache.Shiro.Session.Management
 
         #region Public Properties
 
+        public bool HandleReplacedSessions { get; set; }
+
         public ISessionManager SessionManager { get; set; }
 
         #endregion
@@ -108,8 +134,12 @@ namespace Apache.Shiro.Session.Management
             }
             catch (ReplacedSessionException e)
             {
-                Id = e.NewSessionId;
+                if (!HandleReplacedSessions)
+                {
+                    throw;
+                }
 
+                Id = e.NewSessionId;
                 action(Id);
             }
         }
@@ -122,8 +152,12 @@ namespace Apache.Shiro.Session.Management
             }
             catch (ReplacedSessionException e)
             {
-                Id = e.NewSessionId;
+                if (!HandleReplacedSessions)
+                {
+                    throw;
+                }
 
+                Id = e.NewSessionId;
                 return function(Id);
             }
         }

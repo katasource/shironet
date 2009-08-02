@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Apache.Shiro.Session.Management
@@ -7,7 +8,9 @@ namespace Apache.Shiro.Session.Management
     {
         void CheckValidity(object sessionId);
 
-        ISessionAttributes GetAttributes(object sessionId);
+        ICollection<object> GetAttributeKeys(object sessionId);
+
+        object GetAttribute(object sessionId, object key);
 
         IPAddress GetHostAddress(object sessionId);
 
@@ -19,9 +22,15 @@ namespace Apache.Shiro.Session.Management
 
         bool IsValid(object sessionId);
 
+        object RemoveAttribute(object sessionId, object key);
+
+        void SetAttribute(object sessionId, object key, object value);
+
         void SetTimeout(object sessionId, long timeout);
 
         object Start(IPAddress originatingHost);
+
+        object Start(IDictionary<object, object> data);
 
         void Stop(object sessionId);
 

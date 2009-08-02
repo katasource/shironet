@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 using Apache.Shiro.Cache;
 
-namespace Apache.Shiro.Session.Management.Eis
+namespace Apache.Shiro.Session.Management.Enterprise
 {
     public abstract class CachingSessionDao : ICacheManagerAware, ISessionDao
     {
         #region Constants
 
-        public static string ACTIVE_SESSION_CACHE_NAME = "Shiro-activeSessionCache";
+        public static string ActiveSessionCacheName = "Shiro-activeSessionCache";
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace Apache.Shiro.Session.Management.Eis
 
         public CachingSessionDao()
         {
-            _activeSessionsCacheName = ACTIVE_SESSION_CACHE_NAME;
+            _activeSessionsCacheName = ActiveSessionCacheName;
         }
 
         #region ICacheManagerAware Members

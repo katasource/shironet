@@ -1,15 +1,33 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Apache.Shiro.Session.Management.Eis
+using Apache.Shiro.Cache;
+
+namespace Apache.Shiro.Session.Management.Enterprise
 {
     public class MemorySessionDao : CachingSessionDao
     {
-        private readonly RandomNumberGenerator _randomNumberGenerator;
+        private RandomNumberGenerator _randomNumberGenerator;
 
         public MemorySessionDao()
         {
-            _randomNumberGenerator = GetRandomNumberGenerator();
+            CacheManager = new DictionaryCacheManager();
+        }
+
+        public RandomNumberGenerator RandomNumberGenerator
+        {
+            get
+            {
+                if (_randomNumberGenerator == null)
+                {
+                    _randomNumberGenerator = CreateRandomNumberGenerator();
+                }
+                return _randomNumberGenerator;
+            }
+            set
+            {
+                _randomNumberGenerator = value;
+            }
         }
 
         protected virtual void AssignSessionId(ISession session, object sessionId)
@@ -26,7 +44,7 @@ namespace Apache.Shiro.Session.Management.Eis
 
         protected override object DoCreate(ISession session)
         {
-            object sessionId = GenerateNewSessionId();
+            var sessionId = GenerateNewSessionId();
             AssignSessionId(session, sessionId);
             return sessionId;
         }
@@ -51,13 +69,13 @@ namespace Apache.Shiro.Session.Management.Eis
 
         protected virtual object GenerateNewSessionId()
         {
-            byte[] buffer = new byte[8];
-            _randomNumberGenerator.GetBytes(buffer);
+            var buffer = new byte[8];
+            RandomNumberGenerator.GetBytes(buffer);
 
             return BitConverter.ToUInt64(buffer, 0);
         }
 
-        protected virtual RandomNumberGenerator GetRandomNumberGenerator()
+        protected virtual RandomNumberGenerator CreateRandomNumberGenerator()
         {
             return RandomNumberGenerator.Create();
         }

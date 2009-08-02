@@ -137,4 +137,16 @@
     <value>This dictionary is immutable and read-only--it cannot be altered.</value>
     <comment>Error message for NotSupportedException thrown by ReadOnlyDictionary for any attempt to update the dictionary's contents</comment>
   </data>
+  <data name="SessionExpiredMessage" xml:space="preserve">
+    <value>Session with ID [{0}] has expired. Last access time: {1}. Current time: {2}. Session timeout is set to {3} seconds ({4} minutes)</value>
+    <comment>Error message for ExpiredSessionException thrown by SimpleSession during validation.</comment>
+  </data>
+  <data name="SessionStoppedMessage" xml:space="preserve">
+    <value>Session with ID [{0}] has been explicitly stopped. No further interaction under this session is allowed.</value>
+    <comment>Error message for StoppedSessionException thrown by SimpleSession during validation.</comment>
+  </data>
+  <data name="SessionUnknownMessage" xml:space="preserve">
+    <value>There is no session with ID [{0}].</value>
+    <comment>Error message for UnknownSessionExceptino thrown by AbstractSessionManager when no session exists for a given session ID.</comment>
+  </data>
 </root>

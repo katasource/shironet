@@ -4,6 +4,8 @@ namespace Apache.Shiro.Subject
 {
     public interface IMutablePrincipalCollection : IPrincipalCollection
     {
+        #region Methods
+
         void Add(object principal, string realmName);
 
         void AddAll(ICollection<object> principals, string realmName);
@@ -11,5 +13,7 @@ namespace Apache.Shiro.Subject
         void AddAll(IPrincipalCollection principals);
 
         void Clear();
+
+        #endregion
     }
 }

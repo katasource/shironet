@@ -8,6 +8,8 @@ namespace Apache.Shiro.Subject
 {
     public interface ISubject
     {
+        #region Properties
+
         bool Authenticated
         {
             get;
@@ -22,6 +24,10 @@ namespace Apache.Shiro.Subject
         {
             get;
         }
+
+        #endregion
+
+        #region Methods
 
         void CheckPermission(IPermission permission);
 
@@ -60,5 +66,7 @@ namespace Apache.Shiro.Subject
         void Login(IAuthenticationToken token);
 
         void Logout();
+
+        #endregion
     }
 }

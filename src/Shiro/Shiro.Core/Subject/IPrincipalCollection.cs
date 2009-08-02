@@ -14,14 +14,14 @@ namespace Apache.Shiro.Subject
             get;
         }
 
+        ICollection<object> AsCollection();
+
         IList<object> AsList();
 
-        HashSet<object> AsSet();
+        ICollection<T> ByType<T>();
 
         ICollection<object> FromRealm(string realmName);
 
         T OneByType<T>();
-
-        ICollection<T> ByType<T>();
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Apache.Shiro.Session.Management
@@ -28,9 +29,14 @@ namespace Apache.Shiro.Session.Management
             GetSession(sessionId);
         }
 
-        public ISessionAttributes GetAttributes(object sessionId)
+        public ICollection<object> GetAttributeKeys(object sessionId)
         {
-            return GetSession(sessionId).Attributes;
+            return GetSession(sessionId).AttributeKeys;
+        }
+
+        public object GetAttribute(object sessionId, object key)
+        {
+            return GetSession(sessionId).GetAttribute(key);
         }
 
         public IPAddress GetHostAddress(object sessionId)
@@ -67,17 +73,57 @@ namespace Apache.Shiro.Session.Management
             }
         }
 
+        public object RemoveAttribute(object sessionId, object key)
+        {
+            ISession session = GetSession(sessionId);
+
+            var removed = session.RemoveAttribute(key);
+            if (removed != null)
+            {
+                AfterChanged(session);
+            }
+            return removed;
+        }
+
+        public void SetAttribute(object sessionId, object key, object value)
+        {
+            if (value == null)
+            {
+                RemoveAttribute(sessionId, key);
+            }
+            else
+            {
+                ISession session = GetSession(sessionId);
+                session.SetAttribute(key, value);
+                AfterChanged(session);
+            }
+        }
+
         public void SetTimeout(object sessionId, long timeout)
         {
             ISession session = GetSession(sessionId);
             session.Timeout = timeout;
-            OnChanged(session);
+            AfterChanged(session);
         }
 
         public object Start(IPAddress originatingHost)
         {
-            ISession session = CreateSession(originatingHost);
-            DoStart(session);
+            IDictionary<object, object> data = null;
+            if (originatingHost != null)
+            {
+                data = new Dictionary<object, object>(1);
+                data.Add(SessionFactoryKey.OriginatingHost, originatingHost);
+            }
+            return Start(data);
+        }
+
+        public object Start(IDictionary<object, object> data)
+        {
+            ISession session = CreateSession(data);
+
+            ApplyGlobalSessionTimeout(session);
+            OnStarted(session);
+
             return session.Id;
         }
 
@@ -113,7 +159,23 @@ namespace Apache.Shiro.Session.Management
 
         #region Protected Methods
 
-        protected abstract ISession CreateSession(IPAddress originatingHost);
+        protected virtual void AfterChanged(ISession session)
+        {
+
+        }
+
+        protected virtual void AfterStopped(ISession session)
+        {
+            
+        }
+
+        protected void ApplyGlobalSessionTimeout(ISession session)
+        {
+            session.Timeout = GlobalSessionTimeout;
+            AfterChanged(session);
+        }
+
+        protected abstract ISession CreateSession(IDictionary<object, object> data);
 
         protected abstract ISession DoGetSession(object sessionId);
 
@@ -126,32 +188,34 @@ namespace Apache.Shiro.Session.Management
         {
             session.Stop();
             OnStopped(session);
+            AfterStopped(session);
         }
 
         protected virtual void DoTouch(ISession session)
         {
             session.Touch();
-            OnChanged(session);
+            AfterChanged(session);
         }
 
         protected virtual ISession GetSession(object sessionId)
         {
+            if (sessionId == null)
+            {
+                throw new ArgumentNullException("sessionId");
+            }
+
             var session = DoGetSession(sessionId);
             if (session == null)
             {
-                throw new UnknownSessionException("There is no session with ID [" + sessionId + "]");
+                throw new UnknownSessionException(
+                    string.Format(Properties.Resources.SessionUnknownMessage, sessionId));
             }
             return session;
         }
 
-        protected virtual void OnChanged(ISession session)
-        {
-
-        }
-
         protected virtual void OnExpired(ISession session)
         {
-            OnChanged(session);
+            AfterChanged(session);
 
             var e = new SessionEventArgs(new ImmutableProxiedSession(session));
             OnExpired(e);
@@ -183,10 +247,11 @@ namespace Apache.Shiro.Session.Management
 
         protected virtual void OnStopped(ISession session)
         {
-            OnChanged(session);
+            AfterChanged(session);
 
             var e = new SessionEventArgs(new ImmutableProxiedSession(session));
             OnStopped(e);
+            
         }
 
         protected void OnStopped(SessionEventArgs e)

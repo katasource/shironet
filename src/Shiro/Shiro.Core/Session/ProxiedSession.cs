@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Apache.Shiro.Session
@@ -18,11 +19,11 @@ namespace Apache.Shiro.Session
 
         #region ISession Members
 
-        public virtual ISessionAttributes Attributes
+        public virtual ICollection<object> AttributeKeys
         {
             get
             {
-                return _delegate.Attributes;
+                return _delegate.AttributeKeys;
             }
         }
 
@@ -68,6 +69,21 @@ namespace Apache.Shiro.Session
             {
                 _delegate.Timeout = value;
             }
+        }
+
+        public virtual object GetAttribute(object key)
+        {
+            return _delegate.GetAttribute(key);
+        }
+
+        public object RemoveAttribute(object key)
+        {
+            return _delegate.RemoveAttribute(key);
+        }
+
+        public void SetAttribute(object key, object value)
+        {
+            _delegate.SetAttribute(key, value);
         }
 
         public virtual void Stop()

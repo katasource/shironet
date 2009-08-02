@@ -9,12 +9,15 @@ using Apache.Shiro.Management;
 using Apache.Shiro.Session;
 using Apache.Shiro.Session.Management;
 using Apache.Shiro.Util;
+using Common.Logging;
 
 namespace Apache.Shiro.Subject
 {
     public class DelegatingSubject : ISubject
     {
         #region Private Fields
+
+        private static readonly ILog Log = LogManager.GetLogger(typeof(DelegatingSubject));
 
         private ISession _session;
 
@@ -101,9 +104,15 @@ namespace Apache.Shiro.Subject
 
         public ISession GetSession(bool create)
         {
+            Log.Trace(m => m("Attempting to get session; create={0}; session is null={1}, session ID={2}",
+                             create, (_session == null), (_session == null ? null : _session.Id)));
             if (_session == null && create)
             {
-                
+                var host = HostAddress;
+                Log.TraceFormat("Starting session for host {0}", host);
+
+                var sessionId = SecurityManager.Start(host);
+                _session = DecorateSession(sessionId);
             }
             return _session;
         }
@@ -163,9 +172,12 @@ namespace Apache.Shiro.Subject
             {
                 throw new InvalidSubjectException(Properties.Resources.NullOrEmptyPrincipalsAfterLoginMessage);
             }
+            Principals = principals;
+
+            var session = subject.GetSession(false);
+            _session = (session == null ? null : Decorate(session));
 
             Authenticated = true;
-            Principals = principals;
             if (token is IInetAuthenticationToken)
             {
                 var address = ((IInetAuthenticationToken) token).HostAddress;
@@ -174,9 +186,6 @@ namespace Apache.Shiro.Subject
                     HostAddress = address;
                 }
             }
-
-            var session = subject.GetSession(false);
-            _session = (session == null ? null : Decorate(session));
 
             ThreadContext.Subject = this;
         }
