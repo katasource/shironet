@@ -115,6 +115,15 @@ namespace Apache.Shiro.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No ISecurityManager accessible to this method, either bound to the ThreadContext or as a static singleton. See SecurityUtils.GetSubject() for further documentation regarding proper configuration..
+        /// </summary>
+        internal static string SecurityManagerUnavailableMessage {
+            get {
+                return ResourceManager.GetString("SecurityManagerUnavailableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Session with ID [{0}] has expired. Last access time: {1}. Current time: {2}. Session timeout is set to {3} seconds ({4} minutes).
         /// </summary>
         internal static string SessionExpiredMessage {

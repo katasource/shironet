@@ -141,6 +141,10 @@
     <value>This dictionary is immutable and read-only--it cannot be altered.</value>
     <comment>Error message for NotSupportedException thrown by ReadOnlyDictionary for any attempt to update the dictionary's contents</comment>
   </data>
+  <data name="SecurityManagerUnavailableMessage" xml:space="preserve">
+    <value>No ISecurityManager accessible to this method, either bound to the ThreadContext or as a static singleton. See SecurityUtils.GetSubject() for further documentation regarding proper configuration.</value>
+    <comment>Error message for IllegalOperationException thrown by SecurityUtils when no ISecurityManager is available to use in retrieving the active ISubject</comment>
+  </data>
   <data name="SessionExpiredMessage" xml:space="preserve">
     <value>Session with ID [{0}] has expired. Last access time: {1}. Current time: {2}. Session timeout is set to {3} seconds ({4} minutes)</value>
     <comment>Error message for ExpiredSessionException thrown by SimpleSession during validation.</comment>
