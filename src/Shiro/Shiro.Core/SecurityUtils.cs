@@ -6,7 +6,7 @@ namespace Apache.Shiro
 {
     public static class SecurityUtils
     {
-        private static ISecurityManager _securityManager;
+        public static ISecurityManager SecurityManager{ get; set; }
 
         public static ISubject GetSubject()
         {
@@ -16,9 +16,9 @@ namespace Apache.Shiro
             if (securityManager == null)
             {
                 subject = ThreadContext.Subject;
-                if (subject == null && _securityManager != null)
+                if (subject == null && SecurityManager != null)
                 {
-                    subject = _securityManager.GetSubject();
+                    subject = SecurityManager.GetSubject();
                 }
             }
             else
