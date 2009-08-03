@@ -129,6 +129,10 @@
     <value>This session is immutable and read-only--it cannot be altered. This is usually because the session has been stopped or is expired.</value>
     <comment>Error message for InvalidSessionException thrown by ImmutableProxiedSession when an attempt is made to update the session.</comment>
   </data>
+  <data name="InvalidMethodInvocationMessage" xml:space="preserve">
+    <value>IMethodInvocation incorrectly constructed; Method property returned null.</value>
+    <comment>Error message for ArgumentException thrown by AttributeMethodInterceptor when IMethodInvocation.Method returns null.</comment>
+  </data>
   <data name="NullOrEmptyPrincipalsAfterLoginMessage" xml:space="preserve">
     <value>Principals returned from the ISecurityManager on login are null or empty. Principals after login must be non-null and populated with one or more elements.  Please check the SecurityManager implementation to ensure this happens after a successful login attempt.</value>
     <comment>Error message for InvalidSessionException thrown by DelegatingSubject.Login if the IPrincipalCollection on the ISession returned by ISecurityManager.Login is null or empty.</comment>

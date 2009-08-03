@@ -61,6 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aop\AttributeHandler.cs" />
+    <Compile Include="Aop\AttributeMethodInterceptor.cs" />
+    <Compile Include="Aop\IMethodInterceptor.cs" />
+    <Compile Include="Aop\IMethodInvocation.cs" />
+    <Compile Include="Aop\MethodInterceptorSupport.cs" />
     <Compile Include="Authc\AccountException.cs" />
     <Compile Include="Authc\AuthenticationEventArgs.cs" />
     <Compile Include="Authc\AuthenticationException.cs" />
@@ -87,6 +92,26 @@
     <Compile Include="Authc\Pam\UnsupportedTokenException.cs" />
     <Compile Include="Authc\SuccessfulLoginEventArgs.cs" />
     <Compile Include="Authc\UnknownAccountException.cs" />
+    <Compile Include="Authz\Aop\AttributeAuthorizingMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\AuthenticatedAttributeHandler.cs" />
+    <Compile Include="Authz\Aop\AuthenticatedAttributeMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\AuthorizingAttributeHandler.cs" />
+    <Compile Include="Authz\Aop\AuthorizingAttributeMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\AuthorizingMethodInterceptorSupport.cs" />
+    <Compile Include="Authz\Aop\GuestAttributeMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\IAuthorizingMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\GuestAttributeHandler.cs" />
+    <Compile Include="Authz\Aop\PermissionAttributeHandler.cs" />
+    <Compile Include="Authz\Aop\PermissionsAttributeMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\RolesAttributeHandler.cs" />
+    <Compile Include="Authz\Aop\RolesAttributeMethodInterceptor.cs" />
+    <Compile Include="Authz\Aop\UserAttributeHandler.cs" />
+    <Compile Include="Authz\Aop\UserAttributeMethodInterceptor.cs" />
+    <Compile Include="Authz\Attributes\RequiresAuthenticationAttribute.cs" />
+    <Compile Include="Authz\Attributes\RequiresGuestAttribute.cs" />
+    <Compile Include="Authz\Attributes\RequiresPermissionsAttribute.cs" />
+    <Compile Include="Authz\Attributes\RequiresRolesAttribute.cs" />
+    <Compile Include="Authz\Attributes\RequiresUserAttribute.cs" />
     <Compile Include="Authz\RequiresAuthenticationAttribute.cs" />
     <Compile Include="Authz\RequiresGuestAttribute.cs" />
     <Compile Include="Authz\RequiresPermissionsAttribute.cs" />
@@ -127,6 +152,7 @@
     <Compile Include="IO\ResourceException.cs" />
     <Compile Include="IO\SerializationException.cs" />
     <Compile Include="IO\TextResource.cs" />
+    <Compile Include="SecurityUtils.cs" />
     <Compile Include="Session\Management\SessionFactoryKey.cs" />
     <Compile Include="ShiroException.cs" />
     <Compile Include="Management\IRememberMeManager.cs" />
@@ -218,9 +244,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Aop\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

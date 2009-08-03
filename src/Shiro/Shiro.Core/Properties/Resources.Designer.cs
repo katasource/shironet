@@ -88,6 +88,15 @@ namespace Apache.Shiro.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IMethodInvocation incorrectly constructed; Method property returned null..
+        /// </summary>
+        internal static string InvalidMethodInvocationMessage {
+            get {
+                return ResourceManager.GetString("InvalidMethodInvocationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Principals returned from the ISecurityManager on login are null or empty. Principals after login must be non-null and populated with one or more elements.  Please check the SecurityManager implementation to ensure this happens after a successful login attempt..
         /// </summary>
         internal static string NullOrEmptyPrincipalsAfterLoginMessage {
