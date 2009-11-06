@@ -1,21 +1,35 @@
-using Apache.Shiro.Subject;
+using System;
 
 namespace Apache.Shiro.Authz.Aop
 {
-    public class RolesAttributeHandler : AuthorizingAttributeHandler<RequiresRolesAttribute>
+    public class RolesAttributeHandler : AuthorizingAttributeHandler
     {
-        public override void AssertAuthorized(RequiresRolesAttribute attribute)
+        public RolesAttributeHandler()
+            : base(typeof(RequiresRolesAttribute))
         {
-            string[] roleIds = attribute.Roles;
+            
+        }
+
+        public override void AssertAuthorized(Attribute attribute)
+        {
+            if (attribute is RequiresRolesAttribute)
+            {
+                AssertAuthorized(attribute as RequiresRolesAttribute);
+            }
+        }
+
+        private void AssertAuthorized(RequiresRolesAttribute attribute)
+        {
+            var roleIds = attribute.Roles;
             if (roleIds == null || roleIds.Length == 0)
             {
                 return;
             }
 
-            ISubject subject = GetSubject();
+            var subject = GetSubject();
             if (roleIds.Length == 1)
             {
-                string roleId = roleIds[0];
+                var roleId = roleIds[0];
                 if (!subject.HasRole(roleId))
                 {
                     throw new UnauthorizedException(

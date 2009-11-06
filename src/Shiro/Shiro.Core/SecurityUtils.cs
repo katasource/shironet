@@ -10,7 +10,9 @@ namespace Apache.Shiro
     {
         #region Public Properties
 
+// ReSharper disable MemberCanBePrivate.Global
         public static ISecurityManager SecurityManager{ get; set; }
+// ReSharper restore MemberCanBePrivate.Global
 
         #endregion
 
@@ -20,7 +22,7 @@ namespace Apache.Shiro
         {
             ISubject subject;
 
-            ISecurityManager securityManager = ThreadContext.SecurityManager;
+            var securityManager = ThreadContext.SecurityManager;
             if (securityManager == null)
             {
                 subject = ThreadContext.Subject;

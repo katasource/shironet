@@ -4,8 +4,14 @@ using Apache.Shiro.Aop;
 
 namespace Apache.Shiro.Authz.Aop
 {
-    public abstract class AuthorizingAttributeHandler<T> : AttributeHandler<T> where T : Attribute
+    public abstract class AuthorizingAttributeHandler : AttributeHandler
     {
-        public abstract void AssertAuthorized(T attribute);
+        protected AuthorizingAttributeHandler(Type attributeType)
+            : base(attributeType)
+        {
+
+        }
+
+        public abstract void AssertAuthorized(Attribute attribute);
     }
 }

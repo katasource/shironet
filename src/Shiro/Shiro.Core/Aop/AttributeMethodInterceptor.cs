@@ -3,11 +3,9 @@ using System.Linq;
 
 namespace Apache.Shiro.Aop
 {
-    public abstract class AttributeMethodInterceptor<T, U> : MethodInterceptorSupport
-        where T : AttributeHandler<U>
-        where U : Attribute
+    public abstract class AttributeMethodInterceptor<T> : MethodInterceptorSupport where T : AttributeHandler
     {
-        public AttributeMethodInterceptor(T handler)
+        protected AttributeMethodInterceptor(T handler)
         {
             Handler = handler;
         }
@@ -19,7 +17,7 @@ namespace Apache.Shiro.Aop
             return (GetAttribute(invocation) != null);
         }
 
-        protected U GetAttribute(IMethodInvocation invocation)
+        protected Attribute GetAttribute(IMethodInvocation invocation)
         {
             if (invocation == null)
             {
@@ -32,8 +30,8 @@ namespace Apache.Shiro.Aop
                 throw new ArgumentException(Properties.Resources.InvalidMethodInvocationMessage);
             }
 
-            var attributes = method.GetCustomAttributes(true);
-            return attributes.OfType<U>().FirstOrDefault();
+            var attributes = method.GetCustomAttributes(Handler.AttributeType, true);
+            return attributes.Cast<Attribute>().FirstOrDefault();
         }
     }
 }

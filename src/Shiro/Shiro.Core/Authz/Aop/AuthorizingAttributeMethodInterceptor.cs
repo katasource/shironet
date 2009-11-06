@@ -4,11 +4,10 @@ using Apache.Shiro.Aop;
 
 namespace Apache.Shiro.Authz.Aop
 {
-    public abstract class AuthorizingAttributeMethodInterceptor<T>
-        : AttributeMethodInterceptor<AuthorizingAttributeHandler<T>, T>, IAuthorizingMethodInterceptor
-        where T : Attribute
+    public abstract class AuthorizingAttributeMethodInterceptor
+        : AttributeMethodInterceptor<AuthorizingAttributeHandler>, IAuthorizingMethodInterceptor
     {
-        protected AuthorizingAttributeMethodInterceptor(AuthorizingAttributeHandler<T> handler)
+        protected AuthorizingAttributeMethodInterceptor(AuthorizingAttributeHandler handler)
             : base(handler)
         {
 
@@ -23,10 +22,10 @@ namespace Apache.Shiro.Authz.Aop
 
         public void AssertAuthorized(IMethodInvocation invocation)
         {
-            T attribute = GetAttribute(invocation);
+            Attribute attribute = GetAttribute(invocation);
             if (attribute != null)
             {
-                Handler.AssertAuthorized(GetAttribute(invocation));
+                Handler.AssertAuthorized(attribute);
             }
         }
     }

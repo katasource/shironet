@@ -1,10 +1,18 @@
+using System;
+
 namespace Apache.Shiro.Authz.Aop
 {
-    public class AuthenticatedAttributeHandler : AuthorizingAttributeHandler<RequiresAuthenticationAttribute>
+    public class AuthenticatedAttributeHandler : AuthorizingAttributeHandler
     {
-        public override void AssertAuthorized(RequiresAuthenticationAttribute attribute)
+        public AuthenticatedAttributeHandler()
+            : base(typeof(RequiresAuthenticationAttribute))
         {
-            if (!GetSubject().Authenticated)
+            
+        }
+
+        public override void AssertAuthorized(Attribute attribute)
+        {
+            if (attribute is RequiresAuthenticationAttribute && !GetSubject().Authenticated)
             {
                 throw new UnauthenticatedException("The current Subject is not authenticated. Access denied.");
             }

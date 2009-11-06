@@ -1,7 +1,6 @@
 namespace Apache.Shiro.Authz.Aop
 {
-    public class AuthenticatedAttributeMethodInterceptor
-        : AuthorizingAttributeMethodInterceptor<RequiresAuthenticationAttribute>
+    public class AuthenticatedAttributeMethodInterceptor : AuthorizingAttributeMethodInterceptor
     {
         public AuthenticatedAttributeMethodInterceptor()
             : base(new AuthenticatedAttributeHandler())

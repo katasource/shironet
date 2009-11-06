@@ -1,10 +1,18 @@
+using System;
+
 namespace Apache.Shiro.Authz.Aop
 {
-    public class GuestAttributeHandler : AuthorizingAttributeHandler<RequiresGuestAttribute>
+    public class GuestAttributeHandler : AuthorizingAttributeHandler
     {
-        public override void AssertAuthorized(RequiresGuestAttribute attribute)
+        public GuestAttributeHandler()
+            : base(typeof(RequiresGuestAttribute))
         {
-            if (GetSubject().Principal != null)
+            
+        }
+
+        public override void AssertAuthorized(Attribute attribute)
+        {
+            if (attribute is RequiresGuestAttribute && GetSubject().Principal != null)
             {
                 throw new UnauthenticatedException("Attempting to perform a guest-only operation. The current Subject is " +
                     "not a guest (they have been authenticated or remembered from a previous login). Access denied.");

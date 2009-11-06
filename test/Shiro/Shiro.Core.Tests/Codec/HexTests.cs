@@ -1,5 +1,3 @@
-using System;
-
 using NUnit.Framework;
 
 namespace Apache.Shiro.Codec
@@ -10,7 +8,7 @@ namespace Apache.Shiro.Codec
         [Test]
         public void TestFromHexCharArray()
         {
-            char[] chars = new char[]
+            var chars = new[]
             {
                 '0', '0', '0', '1', '0', '2', '0', '3',
                 '0', '4', '0', '5', '0', '6', '0', '7',
@@ -18,12 +16,12 @@ namespace Apache.Shiro.Codec
                 '0', 'C', '0', 'D', '0', 'E', '0', 'F'
             };
 
-            byte[] expectedBytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-            byte[] actualBytes = Hex.FromHexCharArray(chars);
+            var expectedBytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            var actualBytes = Hex.FromHexCharArray(chars);
             Assert.NotNull(actualBytes);
             Assert.AreEqual(expectedBytes.Length, actualBytes.Length);
 
-            for (int i = 0; i < expectedBytes.Length; ++i)
+            for (var i = 0; i < expectedBytes.Length; ++i)
             {
                 Assert.AreEqual(expectedBytes[i], actualBytes[i]);
             }
@@ -32,12 +30,12 @@ namespace Apache.Shiro.Codec
         [Test]
         public void TestFromHexString()
         {
-            byte[] expectedBytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-            byte[] actualBytes = Hex.FromHexString("000102030405060708090A0B0C0D0E0F");
+            var expectedBytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            var actualBytes = Hex.FromHexString("000102030405060708090A0B0C0D0E0F");
             Assert.NotNull(actualBytes);
             Assert.AreEqual(expectedBytes.Length, actualBytes.Length);
 
-            for (int i = 0; i < expectedBytes.Length; ++i)
+            for (var i = 0; i < expectedBytes.Length; ++i)
             {
                 Assert.AreEqual(expectedBytes[i], actualBytes[i]);
             }
@@ -46,20 +44,20 @@ namespace Apache.Shiro.Codec
         [Test]
         public void TestToHexCharArray()
         {
-            byte[] bytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            var bytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-            char[] expectedChars = new char[]
+            var expectedChars = new[]
             {
                 '0', '0', '0', '1', '0', '2', '0', '3',
                 '0', '4', '0', '5', '0', '6', '0', '7',
                 '0', '8', '0', '9', '0', 'A', '0', 'B',
                 '0', 'C', '0', 'D', '0', 'E', '0', 'F'
             };
-            char[] actualChars = Hex.ToHexCharArray(bytes);
+            var actualChars = Hex.ToHexCharArray(bytes);
             Assert.NotNull(actualChars);
             Assert.AreEqual(expectedChars.Length, actualChars.Length);
 
-            for (int i = 0; i < expectedChars.Length; ++i)
+            for (var i = 0; i < expectedChars.Length; ++i)
             {
                 Assert.AreEqual(expectedChars[i], actualChars[i]);
             }
@@ -68,9 +66,9 @@ namespace Apache.Shiro.Codec
         [Test]
         public void TestToHexString()
         {
-            byte[] bytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            var bytes = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-            string actual = Hex.ToHexString(bytes);
+            var actual = Hex.ToHexString(bytes);
             Assert.NotNull(actual);
             Assert.AreEqual("000102030405060708090A0B0C0D0E0F", actual);
         }

@@ -1,18 +1,32 @@
-using Apache.Shiro.Subject;
+using System;
 
 namespace Apache.Shiro.Authz.Aop
 {
-    public class PermissionAttributeHandler : AuthorizingAttributeHandler<RequiresPermissionsAttribute>
+    public class PermissionAttributeHandler : AuthorizingAttributeHandler
     {
-        public override void AssertAuthorized(RequiresPermissionsAttribute attribute)
+        public PermissionAttributeHandler()
+            : base(typeof(RequiresPermissionsAttribute))
         {
-            string[] permissions = attribute.Permissions;
+            
+        }
+
+        public override void AssertAuthorized(Attribute attribute)
+        {
+            if (attribute is RequiresPermissionsAttribute)
+            {
+                AssertAuthorized(attribute as RequiresPermissionsAttribute);
+            }
+        }
+
+        private void AssertAuthorized(RequiresPermissionsAttribute attribute)
+        {
+            var permissions = attribute.Permissions;
             if (permissions == null || permissions.Length == 0)
             {
                 return;
             }
 
-            ISubject subject = GetSubject();
+            var subject = GetSubject();
             if (permissions.Length == 1)
             {
                 var permission = permissions[0];

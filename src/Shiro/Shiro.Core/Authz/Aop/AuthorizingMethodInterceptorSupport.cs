@@ -1,4 +1,3 @@
-using System;
 using Apache.Shiro.Aop;
 
 namespace Apache.Shiro.Authz.Aop

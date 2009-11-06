@@ -1,10 +1,18 @@
+using System;
+
 namespace Apache.Shiro.Authz.Aop
 {
-    public class UserAttributeHandler : AuthorizingAttributeHandler<RequiresUserAttribute>
+    public class UserAttributeHandler : AuthorizingAttributeHandler
     {
-        public override void AssertAuthorized(RequiresUserAttribute attribute)
+        public UserAttributeHandler()
+            : base(typeof(RequiresUserAttribute))
         {
-            if (GetSubject().Principal == null)
+            
+        }
+
+        public override void AssertAuthorized(Attribute attribute)
+        {
+            if (attribute is RequiresUserAttribute && GetSubject().Principal == null)
             {
                 throw new UnauthenticatedException("Attempting to perform a user-only operation. The current Subject is " +
                     "not a user (they haven't been authenticated or remembered from a previous login). Access denied.");

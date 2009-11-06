@@ -1,7 +1,6 @@
 namespace Apache.Shiro.Authz.Aop
 {
-    public class GuestAttributeMethodInterceptor
-        : AuthorizingAttributeMethodInterceptor<RequiresGuestAttribute>
+    public class GuestAttributeMethodInterceptor : AuthorizingAttributeMethodInterceptor
     {
         public GuestAttributeMethodInterceptor()
             : base(new GuestAttributeHandler())
