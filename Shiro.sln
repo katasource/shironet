@@ -1,6 +1,5 @@
-
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiro.Core", "src\Shiro\Shiro.Core\Shiro.Core.csproj", "{3F829E25-270E-40D4-B4DC-EDD0B96A29C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiro.Core.Tests", "test\Shiro\Shiro.Core.Tests\Shiro.Core.Tests.csproj", "{6C6D5E07-013A-476A-9033-B8354690D61D}"
