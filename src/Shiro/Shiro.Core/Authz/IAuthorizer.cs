@@ -10,29 +10,29 @@ namespace Apache.Shiro.Authz
 
         void CheckPermission(IPrincipalCollection principals, string permission);
 
-        void CheckPermissions(IPrincipalCollection principals, ICollection<IPermission> permissions);
+        void CheckPermissions(IPrincipalCollection principals, IEnumerable<IPermission> permissions);
 
         void CheckPermissions(IPrincipalCollection principals, params string[] permissions);
 
         void CheckRole(IPrincipalCollection principals, string roleId);
 
-        void CheckRoles(IPrincipalCollection principals, ICollection<string> roleIds);
+        void CheckRoles(IPrincipalCollection principals, IEnumerable<string> roleIds);
 
-        bool HasAllRoles(IPrincipalCollection principals, ICollection<string> roleIds);
+        bool HasAllRoles(IPrincipalCollection principals, IEnumerable<string> roleIds);
 
         bool HasRole(IPrincipalCollection principals, string roleId);
 
-        bool[] HasRoles(IPrincipalCollection principals, ICollection<string> roleIds);
+        bool[] HasRoles(IPrincipalCollection principals, IEnumerable<string> roleIds);
 
         bool IsPermitted(IPrincipalCollection principals, IPermission permission);
 
-        bool[] IsPermitted(IPrincipalCollection principals, ICollection<IPermission> permissions);
+        bool[] IsPermitted(IPrincipalCollection principals, IEnumerable<IPermission> permissions);
 
         bool IsPermitted(IPrincipalCollection principals, string permission);
 
         bool[] IsPermitted(IPrincipalCollection principals, params string[] permissions);
 
-        bool IsPermittedAll(IPrincipalCollection principals, ICollection<IPermission> permission);
+        bool IsPermittedAll(IPrincipalCollection principals, IEnumerable<IPermission> permission);
 
         bool IsPermittedAll(IPrincipalCollection principals, params string[] permissions);
     }

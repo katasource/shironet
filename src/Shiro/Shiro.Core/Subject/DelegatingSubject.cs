@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+
+using Common.Logging;
 
 using Apache.Shiro.Authc;
 using Apache.Shiro.Authz;
@@ -9,7 +10,6 @@ using Apache.Shiro.Management;
 using Apache.Shiro.Session;
 using Apache.Shiro.Session.Management;
 using Apache.Shiro.Util;
-using Common.Logging;
 
 namespace Apache.Shiro.Subject
 {
@@ -17,7 +17,7 @@ namespace Apache.Shiro.Subject
     {
         #region Private Fields
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(DelegatingSubject));
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private ISession _session;
 
@@ -29,7 +29,7 @@ namespace Apache.Shiro.Subject
             
         }
 
-        public DelegatingSubject(IPrincipalCollection principals, bool authenticated, IPAddress address,
+        public DelegatingSubject(IPrincipalCollection principals, bool authenticated, string host,
             ISession session, ISecurityManager manager)
         {
             if (manager == null)
@@ -39,7 +39,7 @@ namespace Apache.Shiro.Subject
 
             Authenticated = authenticated;
             Principals = principals;
-            HostAddress = address ?? IPAddress.Loopback;
+            Host = host;
             SecurityManager = manager;
 
             _session = Decorate(session);
@@ -49,7 +49,7 @@ namespace Apache.Shiro.Subject
 
         public bool Authenticated { get; private set; }
 
-        public IPAddress HostAddress { get; protected set; }
+        public string Host { get; protected set; }
 
         public object Principal
         {
@@ -67,16 +67,16 @@ namespace Apache.Shiro.Subject
             SecurityManager.CheckPermission(Principals, permission);
         }
 
-        public void CheckPermissions(ICollection<IPermission> permissions)
-        {
-            AssertAuthcCheckPossible();
-            SecurityManager.CheckPermissions(Principals, permissions);
-        }
-
         public void CheckPermission(string permission)
         {
             AssertAuthcCheckPossible();
             SecurityManager.CheckPermission(Principals, permission);
+        }
+
+        public void CheckPermissions(IEnumerable<IPermission> permissions)
+        {
+            AssertAuthcCheckPossible();
+            SecurityManager.CheckPermissions(Principals, permissions);
         }
 
         public void CheckPermissions(params string[] permissions)
@@ -91,7 +91,7 @@ namespace Apache.Shiro.Subject
             SecurityManager.CheckRole(Principals, roleId);
         }
 
-        public void CheckRoles(ICollection<string> roleIds)
+        public void CheckRoles(IEnumerable<string> roleIds)
         {
             AssertAuthcCheckPossible();
             SecurityManager.CheckRoles(Principals, roleIds);
@@ -108,7 +108,7 @@ namespace Apache.Shiro.Subject
                              create, (_session == null), (_session == null ? null : _session.Id)));
             if (_session == null && create)
             {
-                var host = HostAddress;
+                var host = Host;
                 Log.TraceFormat("Starting session for host {0}", host);
 
                 var sessionId = SecurityManager.Start(host);
@@ -117,7 +117,7 @@ namespace Apache.Shiro.Subject
             return _session;
         }
 
-        public bool HasAllRoles(ICollection<string> roleIds)
+        public bool HasAllRoles(IEnumerable<string> roleIds)
         {
             return (HasPrincipals() && SecurityManager.HasAllRoles(Principals, roleIds));
         }
@@ -127,9 +127,9 @@ namespace Apache.Shiro.Subject
             return (HasPrincipals() && SecurityManager.HasRole(Principals, roleId));
         }
 
-        public bool[] HasRoles(ICollection<string> roleIds)
+        public bool[] HasRoles(IEnumerable<string> roleIds)
         {
-            return (HasPrincipals() ? SecurityManager.HasRoles(Principals, roleIds) : new bool[roleIds.Count]);
+            return (HasPrincipals() ? SecurityManager.HasRoles(Principals, roleIds) : new bool[roleIds.Count()]);
         }
 
         public bool IsPermitted(IPermission permission)
@@ -137,9 +137,9 @@ namespace Apache.Shiro.Subject
             return (HasPrincipals() && SecurityManager.IsPermitted(Principals, permission));
         }
 
-        public bool[] IsPermitted(ICollection<IPermission> permissions)
+        public bool[] IsPermitted(IEnumerable<IPermission> permissions)
         {
-            return (HasPrincipals() ? SecurityManager.IsPermitted(Principals, permissions) : new bool[permissions.Count]);
+            return (HasPrincipals() ? SecurityManager.IsPermitted(Principals, permissions) : new bool[permissions.Count()]);
         }
 
         public bool IsPermitted(string permission)
@@ -153,7 +153,7 @@ namespace Apache.Shiro.Subject
                 SecurityManager.IsPermitted(Principals, permissions) : new bool[permissions.Length]);
         }
 
-        public bool IsPermittedAll(ICollection<IPermission> permissions)
+        public bool IsPermittedAll(IEnumerable<IPermission> permissions)
         {
             return (HasPrincipals() && SecurityManager.IsPermittedAll(Principals, permissions));
         }
@@ -165,26 +165,46 @@ namespace Apache.Shiro.Subject
 
         public void Login(IAuthenticationToken token)
         {
-            var subject = SecurityManager.Login(token);
+            var subject = SecurityManager.Login(this, token);
 
-            var principals = subject.Principals;
+            string host = null;
+            IPrincipalCollection principals;
+            if (subject is DelegatingSubject)
+            {
+                DelegatingSubject delegating = (DelegatingSubject) subject;
+                host = delegating.Host;
+                principals = delegating.Principals;
+            }
+            else
+            {
+                principals = subject.Principals;
+            }
+
             if (principals == null || principals.Count == 0)
             {
                 throw new InvalidSubjectException(Properties.Resources.NullOrEmptyPrincipalsAfterLoginMessage);
             }
+
             Principals = principals;
+            Authenticated = true;
+            if (token is IHostAuthenticationToken)
+            {
+                host = ((IHostAuthenticationToken) token).Host;
+            }
+            if (host != null)
+            {
+                Host = host;
+            }
 
             var session = subject.GetSession(false);
-            _session = (session == null ? null : Decorate(session));
-
-            Authenticated = true;
-            if (token is IInetAuthenticationToken)
+            if (session == null)
             {
-                var address = ((IInetAuthenticationToken) token).HostAddress;
-                if (address != null)
-                {
-                    HostAddress = address;
-                }
+                _session = null;
+            }
+            else
+            {
+                _session = Decorate(session);
+
             }
 
             ThreadContext.Subject = this;
@@ -194,7 +214,7 @@ namespace Apache.Shiro.Subject
         {
             try
             {
-                SecurityManager.Logout(Principals);
+                SecurityManager.Logout(this);
             }
             finally
             {

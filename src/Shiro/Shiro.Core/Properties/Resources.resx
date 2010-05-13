@@ -112,14 +112,18 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AuthcCheckNotPossibleMessage" xml:space="preserve">
     <value>Identity principals are not associated with this Subject instance - authorization operations require an identity to check against.  A Subject instance will acquire these identifying principals automatically after a successful login is performed be executing {0}.login({1}) or when 'Remember Me' functionality is enabled. This exception can also occur when the current Subject has logged out, which relinquishes its identity and essentially makes it anonymous again. Because an identity is currently not known due to any of these conditions, authorization is denied.</value>
     <comment>Error message for UnauthenticatedException thrown when an attempt is made to check roles or permissions for a user who has not logged in.</comment>
+  </data>
+  <data name="AuthenticationFailedForTokenMessage" xml:space="preserve">
+    <value>Authentication failed for token submission [{0}]. Possible unexpected error? (Typical or expected login exceptions should extend from AuthenticationException.)</value>
+    <comment>Error message for AuthenticationException thrown by AbstractAuthenticator when an exception is thrown by DoAuthenticate which does not derive from AuthenticationException.</comment>
   </data>
   <data name="HexCharArrayOddLengthMessage" xml:space="preserve">
     <value>The provided array contains an odd number of characters. Only even-sized arrays can be converted.</value>
@@ -133,6 +137,10 @@
     <value>IMethodInvocation incorrectly constructed; Method property returned null.</value>
     <comment>Error message for ArgumentException thrown by AttributeMethodInterceptor when IMethodInvocation.Method returns null.</comment>
   </data>
+  <data name="NoAccountInformationForTokenMessage" xml:space="preserve">
+    <value>No account information found for authentication token [{0}] by this Authenticator instance. Please check that it is configured correctly.</value>
+    <comment>Error message for AuthenticationException thrown by AbstractAuthenticator when DoAuthenticate returns null.</comment>
+  </data>
   <data name="NullOrEmptyPrincipalsAfterLoginMessage" xml:space="preserve">
     <value>Principals returned from the ISecurityManager on login are null or empty. Principals after login must be non-null and populated with one or more elements.  Please check the SecurityManager implementation to ensure this happens after a successful login attempt.</value>
     <comment>Error message for InvalidSessionException thrown by DelegatingSubject.Login if the IPrincipalCollection on the ISession returned by ISecurityManager.Login is null or empty.</comment>
@@ -142,8 +150,8 @@
     <comment>Error message for NotSupportedException thrown by ReadOnlyDictionary for any attempt to update the dictionary's contents</comment>
   </data>
   <data name="SecurityManagerUnavailableMessage" xml:space="preserve">
-    <value>No ISecurityManager accessible to this method, either bound to the ThreadContext or as a static singleton. See SecurityUtils.GetSubject() for further documentation regarding proper configuration.</value>
-    <comment>Error message for IllegalOperationException thrown by SecurityUtils when no ISecurityManager is available to use in retrieving the active ISubject</comment>
+    <value>No ISecurityManager accessible to this method, either bound to the ThreadContext or as a static singleton. This is an invalid application configuration.</value>
+    <comment>Error message for UnavailableSecurityManagerException thrown by SecurityUtils when no ISecurityManager is available.</comment>
   </data>
   <data name="SessionExpiredMessage" xml:space="preserve">
     <value>Session with ID [{0}] has expired. Last access time: {1}. Current time: {2}. Session timeout is set to {3} seconds ({4} minutes)</value>
@@ -155,6 +163,6 @@
   </data>
   <data name="SessionUnknownMessage" xml:space="preserve">
     <value>There is no session with ID [{0}].</value>
-    <comment>Error message for UnknownSessionExceptino thrown by AbstractSessionManager when no session exists for a given session ID.</comment>
+    <comment>Error message for UnknownSessionException thrown by AbstractSessionManager when no session exists for a given session ID.</comment>
   </data>
 </root>

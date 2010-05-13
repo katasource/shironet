@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
+
+using Common.Logging;
 
 namespace Apache.Shiro.Session.Management
 {
-    public abstract class AbstractSessionManager : ISessionManager, ISessionEventPublisher
+    public abstract class AbstractSessionManager : ISessionManager
     {
-        #region Public Fields
+        #region Public Static Fields
 
         public static readonly long DefaultGlobalSessionTimeout;
 
         #endregion
 
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         static AbstractSessionManager()
         {
-            DefaultGlobalSessionTimeout = (long)TimeSpan.FromMinutes(30).TotalMilliseconds;
+            DefaultGlobalSessionTimeout = (long) TimeSpan.FromMinutes(30).TotalMilliseconds;
         }
 
         public AbstractSessionManager()
@@ -29,19 +32,19 @@ namespace Apache.Shiro.Session.Management
             GetSession(sessionId);
         }
 
-        public ICollection<object> GetAttributeKeys(object sessionId)
-        {
-            return GetSession(sessionId).AttributeKeys;
-        }
-
         public object GetAttribute(object sessionId, object key)
         {
             return GetSession(sessionId).GetAttribute(key);
         }
 
-        public IPAddress GetHostAddress(object sessionId)
+        public ICollection<object> GetAttributeKeys(object sessionId)
         {
-            return GetSession(sessionId).HostAddress;
+            return GetSession(sessionId).AttributeKeys;
+        }
+
+        public string GetHost(object sessionId)
+        {
+            return GetSession(sessionId).Host;
         }
 
         public DateTime GetLastAccessTime(object sessionId)
@@ -75,7 +78,7 @@ namespace Apache.Shiro.Session.Management
 
         public object RemoveAttribute(object sessionId, object key)
         {
-            ISession session = GetSession(sessionId);
+            var session = GetSession(sessionId);
 
             var removed = session.RemoveAttribute(key);
             if (removed != null)
@@ -93,7 +96,7 @@ namespace Apache.Shiro.Session.Management
             }
             else
             {
-                ISession session = GetSession(sessionId);
+                var session = GetSession(sessionId);
                 session.SetAttribute(key, value);
                 AfterChanged(session);
             }
@@ -101,25 +104,24 @@ namespace Apache.Shiro.Session.Management
 
         public void SetTimeout(object sessionId, long timeout)
         {
-            ISession session = GetSession(sessionId);
+            var session = GetSession(sessionId);
             session.Timeout = timeout;
             AfterChanged(session);
         }
 
-        public object Start(IPAddress originatingHost)
+        public object Start(string host)
         {
             IDictionary<object, object> data = null;
-            if (originatingHost != null)
+            if (!string.IsNullOrWhiteSpace(host))
             {
-                data = new Dictionary<object, object>(1);
-                data.Add(SessionFactoryKey.OriginatingHost, originatingHost);
+                data = new Dictionary<object, object>(1) {{SessionFactoryKey.Host, host}};
             }
             return Start(data);
         }
 
         public object Start(IDictionary<object, object> data)
         {
-            ISession session = CreateSession(data);
+            var session = CreateSession(data);
 
             ApplyGlobalSessionTimeout(session);
             OnStarted(session);
@@ -129,19 +131,20 @@ namespace Apache.Shiro.Session.Management
 
         public void Stop(object sessionId)
         {
-            ISession session = GetSession(sessionId);
+            Log.DebugFormat("Stopping session with ID [{0}]", sessionId);
+            var session = GetSession(sessionId);
             DoStop(session);
         }
 
         public void Touch(object sessionId)
         {
-            ISession session = GetSession(sessionId);
+            var session = GetSession(sessionId);
             DoTouch(session);
         }
 
         #endregion
 
-        #region ISessionEventPublisher Members
+        #region Session Events
 
         public event SessionEventHandler Expired;
 

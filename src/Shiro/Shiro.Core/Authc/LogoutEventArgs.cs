@@ -25,4 +25,6 @@ namespace Apache.Shiro.Authc
             }
         }
     }
+
+    public delegate void LogoutEventHandler(object sender, LogoutEventArgs e);
 }

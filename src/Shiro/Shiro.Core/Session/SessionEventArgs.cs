@@ -19,4 +19,6 @@ namespace Apache.Shiro.Session
             }
         }
     }
+
+    public delegate void SessionEventHandler(object sender, SessionEventArgs e);
 }

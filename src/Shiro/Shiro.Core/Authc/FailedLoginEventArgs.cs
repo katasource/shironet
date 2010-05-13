@@ -24,4 +24,6 @@ namespace Apache.Shiro.Authc
             }
         }
     }
+
+    public delegate void FailedLoginEventHandler(object source, FailedLoginEventArgs e);
 }

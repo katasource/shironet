@@ -4,7 +4,7 @@ namespace Apache.Shiro.Authz
 {
     public interface IAuthorizationInfo
     {
-        ICollection<IPermission> Permissions
+        ICollection<IPermission> ObjectPermissions
         {
             get;
         }
@@ -14,6 +14,9 @@ namespace Apache.Shiro.Authz
             get;
         }
 
-        ICollection<string> GetPermissionsAsStrings();
+        ICollection<string> StringPermissions
+        {
+            get;
+        }
     }
 }

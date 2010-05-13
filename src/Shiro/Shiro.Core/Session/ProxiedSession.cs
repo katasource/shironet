@@ -6,7 +6,11 @@ namespace Apache.Shiro.Session
 {
     public class ProxiedSession : ISession
     {
+        #region Private Fields
+
         private readonly ISession _delegate;
+
+        #endregion
 
         public ProxiedSession(ISession target)
         {
@@ -27,11 +31,11 @@ namespace Apache.Shiro.Session
             }
         }
 
-        public virtual IPAddress HostAddress
+        public virtual string Host
         {
             get
             {
-                return _delegate.HostAddress;
+                return _delegate.Host;
             }
         }
 

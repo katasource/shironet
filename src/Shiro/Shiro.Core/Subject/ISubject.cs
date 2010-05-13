@@ -31,35 +31,35 @@ namespace Apache.Shiro.Subject
 
         void CheckPermission(IPermission permission);
 
-        void CheckPermissions(ICollection<IPermission> permissions);
-
         void CheckPermission(string permission);
+
+        void CheckPermissions(IEnumerable<IPermission> permissions);
 
         void CheckPermissions(params string[] permissions);
 
         void CheckRole(string roleId);
 
-        void CheckRoles(ICollection<string> roleIds);
+        void CheckRoles(IEnumerable<string> roleIds);
 
         ISession GetSession();
 
         ISession GetSession(bool create);
 
-        bool HasAllRoles(ICollection<string> roleIds);
+        bool HasAllRoles(IEnumerable<string> roleIds);
 
         bool HasRole(string roleId);
 
-        bool[] HasRoles(ICollection<string> roleIds);
+        bool[] HasRoles(IEnumerable<string> roleIds);
 
         bool IsPermitted(IPermission permission);
 
-        bool[] IsPermitted(ICollection<IPermission> permissions);
+        bool[] IsPermitted(IEnumerable<IPermission> permissions);
 
         bool IsPermitted(string permission);
 
         bool[] IsPermitted(params string[] permissions);
 
-        bool IsPermittedAll(ICollection<IPermission> permissions);
+        bool IsPermittedAll(IEnumerable<IPermission> permissions);
 
         bool IsPermittedAll(params string[] permissions);
 

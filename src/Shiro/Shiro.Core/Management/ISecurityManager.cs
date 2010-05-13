@@ -7,10 +7,10 @@ namespace Apache.Shiro.Management
 {
     public interface ISecurityManager : IAuthenticator, IAuthorizer, ISessionManager
     {
-        ISubject GetSubject();
+        ISubject CreateSubject(ISubjectContext subjectContext);
 
-        ISubject Login(IAuthenticationToken token);
+        ISubject Login(ISubject subject, IAuthenticationToken token);
 
-        void Logout(IPrincipalCollection principals);
+        void Logout(ISubject subject);
     }
 }

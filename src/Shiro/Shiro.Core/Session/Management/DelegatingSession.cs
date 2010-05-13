@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 
 namespace Apache.Shiro.Session.Management
 {
@@ -8,7 +7,7 @@ namespace Apache.Shiro.Session.Management
     {
         #region Private Fields
 
-        private IPAddress _hostAddress;
+        private string _host;
         private DateTime _startTime;
 
         #endregion
@@ -18,19 +17,12 @@ namespace Apache.Shiro.Session.Management
             
         }
 
-        public DelegatingSession(ISessionManager manager, object id)
+        public DelegatingSession(ISessionManager manager, object id, string host = null)
         {
             Id = id;
             SessionManager = manager;
-        }
 
-        public DelegatingSession(ISessionManager manager, object id,
-                                 IPAddress hostAddress, bool handleReplacedSessions)
-            : this(manager, id)
-        {
-            HandleReplacedSessions = handleReplacedSessions;
-
-            _hostAddress = hostAddress;
+            _host = host;
         }
 
         #region ISession Members
@@ -43,15 +35,15 @@ namespace Apache.Shiro.Session.Management
             }
         }
 
-        public IPAddress HostAddress
+        public string Host
         {
             get
             {
-                if (_hostAddress == null)
+                if (_host == null)
                 {
-                    _hostAddress = Do(id => SessionManager.GetHostAddress(id));
+                    _host = Do(id => SessionManager.GetHost(id));
                 }
-                return _hostAddress;
+                return _host;
             }
         }
 
@@ -118,8 +110,6 @@ namespace Apache.Shiro.Session.Management
 
         #region Public Properties
 
-        public bool HandleReplacedSessions { get; set; }
-
         public ISessionManager SessionManager { get; set; }
 
         #endregion
@@ -128,38 +118,12 @@ namespace Apache.Shiro.Session.Management
 
         private void Do(Action<object> action)
         {
-            try
-            {
-                action(Id);
-            }
-            catch (ReplacedSessionException e)
-            {
-                if (!HandleReplacedSessions)
-                {
-                    throw;
-                }
-
-                Id = e.NewSessionId;
-                action(Id);
-            }
+            action(Id);
         }
 
         private T Do<T>(Func<object, T> function)
         {
-            try
-            {
-                return function(Id);
-            }
-            catch (ReplacedSessionException e)
-            {
-                if (!HandleReplacedSessions)
-                {
-                    throw;
-                }
-
-                Id = e.NewSessionId;
-                return function(Id);
-            }
+            return function(Id);
         }
 
         #endregion

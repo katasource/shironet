@@ -2,7 +2,7 @@ namespace Apache.Shiro.Session.Management
 {
     public enum SessionFactoryKey
     {
-        OriginatingHost,
+        Host,
         SessionId
     }
 }

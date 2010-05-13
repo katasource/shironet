@@ -1,5 +1,7 @@
 using System;
 
+using Apache.Shiro.Authz.Attributes;
+
 namespace Apache.Shiro.Authz.Aop
 {
     public class GuestAttributeHandler : AuthorizingAttributeHandler

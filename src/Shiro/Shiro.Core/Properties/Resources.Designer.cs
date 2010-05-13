@@ -70,6 +70,15 @@ namespace Apache.Shiro.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication failed for token submission [{0}]. Possible unexpected error? (Typical or expected login exceptions should extend from AuthenticationException.).
+        /// </summary>
+        internal static string AuthenticationFailedForTokenMessage {
+            get {
+                return ResourceManager.GetString("AuthenticationFailedForTokenMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The provided array contains an odd number of characters. Only even-sized arrays can be converted..
         /// </summary>
         internal static string HexCharArrayOddLengthMessage {
@@ -97,6 +106,15 @@ namespace Apache.Shiro.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No account information found for authentication token [{0}] by this Authenticator instance. Please check that it is configured correctly..
+        /// </summary>
+        internal static string NoAccountInformationForTokenMessage {
+            get {
+                return ResourceManager.GetString("NoAccountInformationForTokenMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Principals returned from the ISecurityManager on login are null or empty. Principals after login must be non-null and populated with one or more elements.  Please check the SecurityManager implementation to ensure this happens after a successful login attempt..
         /// </summary>
         internal static string NullOrEmptyPrincipalsAfterLoginMessage {
@@ -115,7 +133,7 @@ namespace Apache.Shiro.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No ISecurityManager accessible to this method, either bound to the ThreadContext or as a static singleton. See SecurityUtils.GetSubject() for further documentation regarding proper configuration..
+        ///   Looks up a localized string similar to No ISecurityManager accessible to this method, either bound to the ThreadContext or as a static singleton. This is an invalid application configuration..
         /// </summary>
         internal static string SecurityManagerUnavailableMessage {
             get {

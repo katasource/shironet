@@ -1,5 +1,3 @@
-using System;
-
 using Apache.Shiro.Management;
 using Apache.Shiro.Subject;
 using Apache.Shiro.Util;
@@ -8,11 +6,32 @@ namespace Apache.Shiro
 {
     public static class SecurityUtils
     {
+        #region Private Static Fields
+
+        private static ISecurityManager _securityManager;
+
+        #endregion
+
         #region Public Properties
 
-// ReSharper disable MemberCanBePrivate.Global
-        public static ISecurityManager SecurityManager{ get; set; }
-// ReSharper restore MemberCanBePrivate.Global
+        public static ISecurityManager SecurityManager
+        {
+            //TODO: Why check ThreadContext first?
+            get
+            {
+                var securityManager = ThreadContext.SecurityManager ?? _securityManager;
+                if (securityManager == null)
+                {
+                    throw new UnavailableSecurityManagerException(
+                        Properties.Resources.SecurityManagerUnavailableMessage);
+                }
+                return securityManager;
+            }
+            set
+            {
+                _securityManager = value;
+            }
+        }
 
         #endregion
 
@@ -20,27 +39,12 @@ namespace Apache.Shiro
 
         public static ISubject GetSubject()
         {
-            ISubject subject;
-
-            var securityManager = ThreadContext.SecurityManager;
-            if (securityManager == null)
-            {
-                subject = ThreadContext.Subject;
-                if (subject == null && SecurityManager != null)
-                {
-                    subject = SecurityManager.GetSubject();
-                }
-            }
-            else
-            {
-                subject = securityManager.GetSubject();
-            }
-
+            var subject = ThreadContext.Subject;
             if (subject == null)
             {
-                throw new InvalidOperationException(Properties.Resources.SecurityManagerUnavailableMessage);
+                subject = new SubjectBuilder().BuildSubject();
+                ThreadContext.Subject = subject;
             }
-
             return subject;
         }
 

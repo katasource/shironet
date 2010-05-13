@@ -10,7 +10,12 @@ namespace Apache.Shiro.Aop
         }
 
         MethodInfo Method
-        { 
+        {
+            get;
+        }
+
+        object This
+        {
             get;
         }
 

@@ -13,7 +13,7 @@ namespace Apache.Shiro.Session
             get;
         }
 
-        IPAddress HostAddress
+        string Host
         {
             get;
         }

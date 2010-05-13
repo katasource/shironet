@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 
 using Common.Logging;
 
@@ -10,27 +9,17 @@ namespace Apache.Shiro.Session.Management
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof (SimpleSession));
 
-        private IDictionary<object, object> _attributes;
-        private IPAddress _hostAddress;
-        private DateTime _lastAccessTime;
-        private DateTime _startTime;
-        private DateTime _stopTime;
-
-        private bool _expired;
-        private object _id;
-        private long _timeout;
-
         public SimpleSession()
-            : this(IPAddress.Loopback)
+            : this(null)
         {
 
         }
 
-        public SimpleSession(IPAddress hostAddress)
+        public SimpleSession(string host)
         {
-            _hostAddress = hostAddress;
-            _startTime = DateTime.Now;
-            _lastAccessTime = _startTime;
+            Host = host;
+            StartTime = DateTime.Now;
+            LastAccessTime = StartTime;
         }
 
         #region ISession Members
@@ -39,113 +28,83 @@ namespace Apache.Shiro.Session.Management
         {
             get
             {
-                return _attributes == null ? new Object[0] : _attributes.Keys;
+                return Attributes == null ? new Object[0] : Attributes.Keys;
             }
         }
 
-        public IPAddress HostAddress
+        public string Host
         {
-            get
-            {
-                return _hostAddress;
-            }
-            set
-            {
-                _hostAddress = value;
-            }
+            get;
+            set;
         }
 
         public object Id
         {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
+            get;
+            set;
         }
 
         public DateTime LastAccessTime
         {
-            get
-            {
-                return _lastAccessTime;
-            }
+            get;
+            private set;
         }
 
         public DateTime StartTime
         {
-            get
-            {
-                return _startTime;
-            }
-            set
-            {
-                _startTime = value;
-            }
+            get;
+            set;
         }
 
-        public long Timeout
-        {
-            get
-            {
-                return _timeout;
-            }
-            set
-            {
-                _timeout = value;
-            }
-        }
+        public long Timeout { get; set; }
 
         public object GetAttribute(object key)
         {
-            if (_attributes == null)
+            if (Attributes == null)
             {
                 return null;
             }
 
             object value;
-            _attributes.TryGetValue(key, out value);
+            Attributes.TryGetValue(key, out value);
             return value;
         }
 
         public object RemoveAttribute(object key)
         {
-            if (_attributes == null)
+            if (Attributes == null)
             {
                 return null;
             }
 
             object value;
-            if (_attributes.TryGetValue(key, out value))
+            if (Attributes.TryGetValue(key, out value))
             {
-                _attributes.Remove(key);
+                Attributes.Remove(key);
             }
             return value;
         }
 
         public void SetAttribute(object key, object value)
         {
-            if (_attributes == null)
+            if (Attributes == null)
             {
-                _attributes = new Dictionary<object, object>();
+                Attributes = new Dictionary<object, object>();
             }
-            _attributes.Add(key, value);
+            Attributes.Add(key, value);
         }
 
         public void Stop()
         {
-            if (_stopTime.Ticks == 0)
+            if (StopTime.Ticks == 0)
             {
-                _stopTime = new DateTime();
+                StopTime = new DateTime();
             }
         }
 
         public void Touch()
         {
-            _lastAccessTime = new DateTime();
+            LastAccessTime = new DateTime();
         }
 
         #endregion
@@ -187,46 +146,28 @@ namespace Apache.Shiro.Session.Management
 
         public IDictionary<object, object> Attributes
         {
-            get
-            {
-                return _attributes;
-            }
-            set
-            {
-                _attributes = value;
-            }
+            get;
+            set;
         }
 
         public bool IsExpired
         {
-            get
-            {
-                return _expired;
-            }
-            set
-            {
-                _expired = value;
-            }
+            get;
+            set;
         }
 
         public bool IsStopped
         {
             get
             {
-                return _stopTime != default(DateTime);
+                return StopTime != default(DateTime);
             }
         }
 
         public DateTime StopTime
         {
-            get
-            {
-                return _stopTime;
-            }
-            set
-            {
-                _stopTime = value;
-            }
+            get;
+            set;
         }
 
         #endregion
@@ -236,9 +177,9 @@ namespace Apache.Shiro.Session.Management
         protected void Expire()
         {
             Stop();
-            if (!_expired)
+            if (!IsExpired)
             {
-                _expired = true;
+                IsExpired = true;
             }
         }
 

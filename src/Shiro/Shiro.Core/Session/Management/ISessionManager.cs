@@ -8,11 +8,11 @@ namespace Apache.Shiro.Session.Management
     {
         void CheckValidity(object sessionId);
 
-        ICollection<object> GetAttributeKeys(object sessionId);
-
         object GetAttribute(object sessionId, object key);
 
-        IPAddress GetHostAddress(object sessionId);
+        ICollection<object> GetAttributeKeys(object sessionId);
+
+        string GetHost(object sessionId);
 
         DateTime GetLastAccessTime(object sessionId);
 
@@ -28,7 +28,7 @@ namespace Apache.Shiro.Session.Management
 
         void SetTimeout(object sessionId, long timeout);
 
-        object Start(IPAddress originatingHost);
+        object Start(string host);
 
         object Start(IDictionary<object, object> data);
 

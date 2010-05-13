@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
+
 using Apache.Shiro.Management;
 using Apache.Shiro.Subject;
 
@@ -8,27 +8,13 @@ namespace Apache.Shiro.Util
 {
     public static class ThreadContext
     {
-        public const string HostAddressKey = KeyRoot + "HOST_ADDRESS";
         public const string SecurityManagerKey = KeyRoot + "SECURITY_MANAGER";
-        public const string SessionIdKey = KeyRoot + "SESSION_ID";
         public const string SubjectKey = KeyRoot + "SUBJECT";
 
         private const string KeyRoot = "Apache.Shiro.Util.ThreadContext.";
 
         [ThreadStatic]
         private static IDictionary<string, object> _context;
-
-        public static IPAddress HostAddress
-        {
-            get
-            {
-                return GetAs<IPAddress>(HostAddressKey);
-            }
-            set
-            {
-                Set(HostAddressKey, value);
-            }
-        }
 
         public static ISecurityManager SecurityManager
         {
@@ -39,18 +25,6 @@ namespace Apache.Shiro.Util
             set
             {
                 Set(SecurityManagerKey, value);
-            }
-        }
-
-        public static object SessionId
-        {
-            get
-            {
-                return Get(SessionIdKey);
-            }
-            set
-            {
-                Set(SessionIdKey, value);
             }
         }
 
