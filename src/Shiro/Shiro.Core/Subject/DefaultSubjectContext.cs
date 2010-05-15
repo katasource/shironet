@@ -12,8 +12,7 @@ namespace Apache.Shiro.Subject
 {
     public class DefaultSubjectContext : ISubjectContext
     {
-        public const string AuthenticatedSessionKey = KeyRoot + ".SESSION.AUTHENTICATED";
-        public const string PrincipalsSessionKey = KeyRoot + ".SESSION.PRINCIPALS";
+        #region Private Constants
 
         private const string AuthenticatedKey = KeyRoot + ".AUTHENTICATED";
         private const string AuthenticationInfoKey = KeyRoot + ".AUTHENTICATION_INFO";
@@ -26,9 +25,19 @@ namespace Apache.Shiro.Subject
         private const string SessionIdKey = SessionKey + "_ID";
         private const string SubjectKey = KeyRoot + ".SUBJECT";
 
+        #endregion
+
+        #region Private Static Fields
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        #endregion
+
+        #region Private Fields
+
         private readonly IDictionary<string, object> _dictionary;
+
+        #endregion
 
         public DefaultSubjectContext()
         {
@@ -263,7 +272,6 @@ namespace Apache.Shiro.Subject
             }
         }
 
-        //TODO: WTF?
         public bool ResolveAuthenticated()
         {
             if (_dictionary.ContainsKey(AuthenticatedKey))
@@ -281,7 +289,7 @@ namespace Apache.Shiro.Subject
                 return false;
             }
 
-            var attribute = session.GetAttribute(AuthenticatedSessionKey);
+            var attribute = session.GetAttribute(SessionAttributeKey.Authenticated);
             return (attribute == null ? false : (bool) attribute);
         }
 
@@ -333,7 +341,7 @@ namespace Apache.Shiro.Subject
                         var session = ResolveSession();
                         if (session != null)
                         {
-                            principals = (IPrincipalCollection) session.GetAttribute(PrincipalsSessionKey);
+                            principals = (IPrincipalCollection)session.GetAttribute(SessionAttributeKey.Principals);
                         }
                     }
                 }
@@ -374,6 +382,8 @@ namespace Apache.Shiro.Subject
 
         #endregion
 
+        #region Public Methods
+
         public T GetAs<T>(string key)
         {
             if (_dictionary.ContainsKey(key))
@@ -383,6 +393,10 @@ namespace Apache.Shiro.Subject
             return default(T);
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void AddIfSet(string key, object value)
         {
             if (value != null)
@@ -390,5 +404,7 @@ namespace Apache.Shiro.Subject
                 Add(key, value);
             }
         }
+
+        #endregion
     }
 }

@@ -156,6 +156,7 @@
     <Compile Include="IO\TextResource.cs" />
     <Compile Include="SecurityUtils.cs" />
     <Compile Include="Session\Management\SessionFactoryKey.cs" />
+    <Compile Include="Session\SessionAttributeKey.cs" />
     <Compile Include="ShiroException.cs" />
     <Compile Include="Management\IRememberMeManager.cs" />
     <Compile Include="Management\ISecurityManager.cs" />

@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using Apache.Shiro.Subject;
 
 namespace Apache.Shiro.Authc
@@ -25,9 +25,23 @@ namespace Apache.Shiro.Authc
             Credentials = credentials;
         }
 
-        public object Credentials { get; set; }
+        #region IAuthenticationInfo Members
 
-        public IPrincipalCollection Principals { get; set; }
+        public object Credentials
+        {
+            get;
+            set;
+        }
+
+        public IPrincipalCollection Principals
+        {
+            get;
+            set;
+        }
+
+        #endregion
+
+        #region IMergeableAuthenticationInfo Members
 
         public void Merge(IAuthenticationInfo other)
         {
@@ -60,22 +74,31 @@ namespace Apache.Shiro.Authc
                 return;
             }
 
-            //TODO: This has a metric ton of loopholes and weaknesses in .NET
-            if (!(Credentials is ICollection))
+            ISet<object> credentials;
+            if (Credentials is ISet<object>)
             {
-                Credentials = new HashSet<object> { Credentials };
+                credentials = (ISet<object>) Credentials;
+            }
+            else
+            {
+                Credentials = credentials = new HashSet<object>();
             }
 
-            var credentials = (ISet<object>) Credentials;
             if (other.Credentials is IEnumerable)
             {
-                credentials.UnionWith((IEnumerable<object>) other.Credentials);
+                var enumerable = (IEnumerable) other.Credentials;
+
+                credentials.UnionWith(enumerable.Cast<object>());
             }
             else
             {
                 credentials.Add(other.Credentials);
             }
         }
+
+        #endregion
+
+        #region Public Methods
 
         public override bool Equals(object obj)
         {
@@ -102,5 +125,7 @@ namespace Apache.Shiro.Authc
         {
             return (Principals == null ? base.ToString() : Principals.ToString());
         }
+
+        #endregion
     }
 }

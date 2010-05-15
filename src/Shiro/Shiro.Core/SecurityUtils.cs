@@ -16,7 +16,6 @@ namespace Apache.Shiro
 
         public static ISecurityManager SecurityManager
         {
-            //TODO: Why check ThreadContext first?
             get
             {
                 var securityManager = ThreadContext.SecurityManager ?? _securityManager;
